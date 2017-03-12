@@ -17,6 +17,10 @@ const ConvStatus = {
   INIT: '0',
   NEWREQ: '1',
 };
+
+const ClearWindow = () => {
+  while (dialogWindow.firstChild) dialogWindow.removeChild(dialogWindow.firstChild);
+};
 const StatusChanged = (statusType) => {
   const msg = {
     type: statusType,
@@ -53,7 +57,7 @@ const AdjustChat = (disable) => {
 const OnPeerConnection = () => {
   isWaiting = false;
   clearTimeout(queuingTimeout);
-  while (dialogWindow.firstChild) dialogWindow.removeChild(dialogWindow.firstChild);
+  ClearWindow();
   const element = document.getElementById('real-input-area');
   element.textContent = '';
   element.nextElementSibling.style.visibility = 'visible';
@@ -113,6 +117,7 @@ socket.on('connect', () => {
     connectButton.disabled = true;
     isWaiting = true;
     AdjustChat(true);
+    ClearWindow();
     PrintMessage('Welcome! Finding a peer for you...', MsgType.SYSTEM);
     queuingTimeout = setTimeout(() => {
       if (isWaiting) {
