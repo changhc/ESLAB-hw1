@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+    <head>
+      <link rel="stylesheet" href="./main.css">
+    </head>
+    <body>
+      <div id="container">
+        <div id="info">
+          <div>
+              <div style="display: inline-block; width: 5em;">Your ID: </div>
+              <div id="id" style="display: inline-block"></div>
+          </div>
+          <div>
+              <div style="display: inline-block">Your Socket ID: </div>
+              <div id="socketId" style="display: inline-block"></div>
+          </div>
+        </div>
+        <button id="connectButton" disabled>Connect to peer</button>
+        <div id="dialog-window"></div>
+        <div id="input-area">
+          <div contenteditable="true" id="real-input-area" autofocus></div>
+          <div id="input-area-reminder">Type a message...</div>
+        </div>
+      </div>
+    <script src="http://cdn.peerjs.com/0.3/peer.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
+    <script src="./main.js"></script>
+  </body>
+</html>

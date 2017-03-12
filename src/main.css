@@ -1,0 +1,90 @@
+body {
+  text-align: center;
+}
+
+#container {
+  margin: 0 auto;
+  display: inline-block;
+  text-align: center;
+}
+
+#info {
+  width: 60%;
+  text-align: left;
+  margin: 0 auto;
+  display: inline-block;
+  padding-right: 1em;
+}
+
+#connectButton {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 auto;
+  width: 10em;
+}
+
+#dialog-window {
+  margin-top: 1em;
+  margin-bottom: 1em;
+  height: 300px;
+  width: 500px;
+  border: 1px black solid;
+  overflow: auto;
+}
+
+#input-area {
+  border: 2px black solid;
+  height: 50px;
+  width: 500px;
+}
+
+#real-input-area {
+  height: 40px;
+  font-size:24px;
+  width: 490px;
+  overflow: auto;
+  position: absolute;
+  z-index: 100;
+  margin: 5px;
+  outline:none;
+  text-align: left;
+}
+#input-area-reminder {
+  position: absolute;
+  font-size:24px;
+  color: #aaa;
+  user-select: none;
+  margin: 5px;
+}
+
+.msg {
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 3px;
+  margin-bottom: 3px;
+  border-radius: 1em;
+  padding: 8px;
+  clear: both;
+  max-width: 70%;
+  overflow-wrap: break-word;
+}
+
+.peerMsg {
+  text-align: left;
+  float: left;
+  background: #ccc;
+  border: 1px black solid;
+}
+
+.myMsg {
+  text-align: left;
+  float: right;
+  border: 1px black solid;
+}
+
+.sysMsg {
+  text-align: center;
+  color: #999;
+  margin: 0 auto;
+  white-space: pre-line;
+}

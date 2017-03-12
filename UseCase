@@ -1,0 +1,4 @@
+* new window -> input area not allowed -> user get new id -> system: waiting -> connected -> user can see peer id
+  -> button: disconnect -> sysMsg: you can start talking -> input area allowed
+* chatting -> user disconnect -> button: find a new peer -> input area not allowed -> sysMsg: disconnected
+* chatting -> peer disconnected -> ^
