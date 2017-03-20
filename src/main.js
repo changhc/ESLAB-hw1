@@ -5,22 +5,29 @@ let isWaiting = false;
 let disconnectPressed = false;
 let connectionTimeout = null;
 let queuingTimeout = null;
+let msgCount = 0;
 const socket = io();
 const dialogWindow = document.getElementById('dialog-window');
 const connectButton = document.getElementById('connectButton');
+
+/* enum definition start */
 const MsgType = {
   SELF: '0',
   PEER: '1',
   SYSTEM: '2',
 };
+
 const ConvStatus = {
   INIT: '0',
   NEWREQ: '1',
 };
+/* enum definition end */
 
+/* function definition start */
 const ClearWindow = () => {
   while (dialogWindow.firstChild) dialogWindow.removeChild(dialogWindow.firstChild);
 };
+
 const StatusChanged = (statusType) => {
   const msg = {
     type: statusType,
@@ -33,9 +40,13 @@ const StatusChanged = (statusType) => {
 const PrintMessage = (msg, type) => {
   const newMsg = document.createElement('div');
   newMsg.classList.add('msg');
-  if (type === MsgType.SELF) newMsg.classList.add('myMsg');
-  else if (type === MsgType.PEER) newMsg.classList.add('peerMsg');
-  else if (type === MsgType.SYSTEM) newMsg.classList.add('sysMsg');
+  newMsg.setAttribute('time', Date.now());
+  if (type === MsgType.SYSTEM) newMsg.classList.add('sysMsg');
+  else {
+    msgCount += 1;
+    if (type === MsgType.PEER) newMsg.classList.add('peerMsg');
+    else newMsg.classList.add('myMsg');
+  }
   newMsg.textContent = msg;
   dialogWindow.appendChild(newMsg);
   dialogWindow.scrollTop = dialogWindow.scrollHeight;
@@ -54,13 +65,41 @@ const AdjustChat = (disable) => {
   }
 };
 
+const SaveMessage = () => {
+  const msgList = document.querySelectorAll('div.msg:not(.sysMsg)');
+  let text = `Peer ID: ${pc.peer}\n`;
+  for (let i = 0; i < msgList.length; i += 1) {
+    const date = new Date(parseInt(msgList[i].getAttribute('time'), 10)).toLocaleString();
+    text += `${date}\t`;
+    if (msgList[i].classList.contains('myMsg')) {
+      text += `You\t: ${msgList[i].textContent}\n`;
+    } else {
+      text += `Peer\t: ${msgList[i].textContent}\n`;
+    }
+  }
+  const date = new Date(Date.now());
+  const element = document.createElement('a');
+  element.setAttribute('href', `data:text/plain;charset=utf-8,${encodeURIComponent(text)}`);
+  element.setAttribute('download', `Log-${date.toDateString()} ${date.toLocaleTimeString()}.txt`);
+
+  element.style.display = 'none';
+  document.body.appendChild(element);
+  element.click();
+  document.body.removeChild(element);
+};
+
+const SaveLogButton = () => {
+  const newMsg = document.createElement('button');
+  newMsg.classList.add('msg');
+  newMsg.textContent = 'Download your log';
+  newMsg.onclick = SaveMessage;
+  dialogWindow.appendChild(newMsg);
+  dialogWindow.scrollTop = dialogWindow.scrollHeight;
+};
+
 const OnPeerConnection = () => {
   isWaiting = false;
   clearTimeout(queuingTimeout);
-  ClearWindow();
-  const element = document.getElementById('real-input-area');
-  element.textContent = '';
-  element.nextElementSibling.style.visibility = 'visible';
   PrintMessage(`Connected to ${pc.peer}. Say hi!`, MsgType.SYSTEM);
   connectButton.innerText = 'Disconnect';
   connectButton.disabled = false;
@@ -82,6 +121,10 @@ const OnPeerConnection = () => {
     } else {
       PrintMessage(`${pc.peer} has left this conversation.`, MsgType.SYSTEM);
     }
+
+    if (msgCount > 0) {
+      SaveLogButton();
+    }
     AdjustChat(true);
     isConnected = false;
   });
@@ -93,7 +136,9 @@ const OnPeerConnection = () => {
     }
   }, 10000);
 };
+/* function definition end */
 
+/* socket event registration start */
 socket.on('OK', (msg) => {
   console.log(`Socket: ${msg}`);
 });
@@ -140,10 +185,17 @@ socket.on('connect', () => {
     AdjustChat(true);
   });
 });
+/* socket event registration end */
 
+/* DOM event listener registration start */
 connectButton.addEventListener('click', () => {
   if (!pc || !pc.open) {
     StatusChanged(ConvStatus.NEWREQ);
+    ClearWindow();
+    const element = document.getElementById('real-input-area');
+    element.textContent = '';
+    element.nextElementSibling.style.visibility = 'visible';
+    PrintMessage('Finding a new peer...', MsgType.SYSTEM);
     connectButton.innerText = 'Waiting...';
     connectButton.disabled = true;
     isWaiting = true;
@@ -158,6 +210,7 @@ connectButton.addEventListener('click', () => {
     pc.close();
   }
 });
+/* DOM event listener registration end */
 
 /* input area start */
 document.getElementById('real-input-area').addEventListener('keydown', (event) => {
