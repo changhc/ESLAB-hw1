@@ -6,6 +6,7 @@ let disconnectPressed = false;
 let connectionTimeout = null;
 let queuingTimeout = null;
 let msgCount = 0;
+let endTime = null;
 const socket = io();
 const dialogWindow = document.getElementById('dialog-window');
 const connectButton = document.getElementById('connectButton');
@@ -74,13 +75,13 @@ const SaveMessage = () => {
     if (msgList[i].classList.contains('myMsg')) {
       text += `You\t: ${msgList[i].textContent}\n`;
     } else {
-      text += `Peer\t: ${msgList[i].textContent}\n`;
+      text += `Peer: ${msgList[i].textContent}\n`;
     }
   }
-  const date = new Date(Date.now());
+
   const element = document.createElement('a');
   element.setAttribute('href', `data:text/plain;charset=utf-8,${encodeURIComponent(text)}`);
-  element.setAttribute('download', `Log-${date.toDateString()} ${date.toLocaleTimeString()}.txt`);
+  element.setAttribute('download', `log-${endTime.toDateString()} ${endTime.toLocaleTimeString()}.txt`);
 
   element.style.display = 'none';
   document.body.appendChild(element);
@@ -121,7 +122,7 @@ const OnPeerConnection = () => {
     } else {
       PrintMessage(`${pc.peer} has left this conversation.`, MsgType.SYSTEM);
     }
-
+    endTime = new Date(Date.now());
     if (msgCount > 0) {
       SaveLogButton();
     }
@@ -218,8 +219,12 @@ document.getElementById('real-input-area').addEventListener('keydown', (event) =
     event.preventDefault();
     const element = event.target;
     if (element.textContent.length > 0) {
-      PrintMessage(element.textContent, MsgType.SELF);
-      pc.send(element.textContent);
+      let text = element.textContent;
+      if (text.toLowerCase() === 'fuck' || text.toLowerCase() === 'shit' || text.toLowerCase() === 'bitch') {
+        text = '*'.repeat(text.length);
+      }
+      PrintMessage(text, MsgType.SELF);
+      pc.send(text);
       element.textContent = '';
       element.nextElementSibling.style.visibility = 'visible';
     }

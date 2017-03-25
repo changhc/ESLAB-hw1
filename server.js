@@ -80,7 +80,7 @@ setInterval(() => {
     redis.hset(pair[1].id, 'status', 'paired');
     pair.length = 0;
   }
-}, 5000);
+}, 2000);
 
 server.use(restify.bodyParser());
 server.listen(3000, () => {

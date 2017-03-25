@@ -1,5 +1,6 @@
 body {
   text-align: center;
+  margin-top: 2em;
 }
 
 #container {
@@ -30,6 +31,7 @@ body {
   width: 500px;
   border: 1px black solid;
   overflow: auto;
+  padding-bottom: 5px;
 }
 
 #input-area {
@@ -62,7 +64,6 @@ body {
   margin-right: 10px;
   margin-top: 3px;
   margin-bottom: 3px;
-  border-radius: 1em;
   padding: 8px;
   clear: both;
   max-width: 70%;
@@ -70,16 +71,30 @@ body {
 }
 
 .peerMsg {
+  
   text-align: left;
-  float: left;
-  background: #ccc;
-  border: 1px black solid;
+  float: left;  
+  border-top-left-radius: 1.3em;
+  border-top-right-radius: 1.3em;
+  border-bottom-left-radius: 1.3em;
+  border-bottom-right-radius: 1.3em;
+  border: 1px solid rgba(0, 0, 0, .20);
+  padding: 5px 15px;
+  color: black;
+  background-color: rgba(255, 255, 255, .10);
 }
 
 .myMsg {
+  
   text-align: left;
   float: right;
-  border: 1px black solid;
+  border-top-left-radius: 1.3em;
+  border-top-right-radius: 1.3em;
+  border-bottom-left-radius: 1.3em;
+  border-bottom-right-radius: 1.3em;
+  padding: 5px 15px;
+  color: white;
+  background-color: #0084ff;
 }
 
 .sysMsg {
