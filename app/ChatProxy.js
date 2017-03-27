@@ -38,7 +38,7 @@ ChatProxy.prototype.OnPeerConnection = function () {
     var self = this;
     this.isWaiting = false;
     clearTimeout(this.queuingTimeout);
-    this.emit('clear-chat');
+    this.emit('clear-chat', self.pc.peer);
     this.emit('message', {
         speaker: '2',
         message: 'Connected to ' + this.pc.peer + '. Say hi!',
@@ -72,6 +72,10 @@ ChatProxy.prototype.OnPeerConnection = function () {
             this.disconnectPressed = true;
             self.emit('status-change');
         }
+        self.emit('message', {
+            speaker: '3',
+            message: '',
+        });
         self.isConnected = false;
         self.emit('status-change');
     });

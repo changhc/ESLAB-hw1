@@ -89,5 +89,5 @@ server.listen(3000, () => {
 
 server.get(/\/*/, restify.serveStatic({
   directory: path.join(__dirname, '/src'),
-  default: 'main.html',
+  default: 'index.html',
 }));

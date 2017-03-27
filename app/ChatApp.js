@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import MessageItemFromOther from './MessageItemFromOther.js'
 import MessageItemFromSystem from './MessageItemFromSystem.js'
 import MessageItemFromMe from './MessageItemFromMe.js'
+import SaveButton from './SaveButton.js'
 
 export default class App extends React.Component {
   constructor(props) {
@@ -12,6 +13,7 @@ export default class App extends React.Component {
         newmsg: "",
         bConnected: false,
         bPressed: false,
+        peerId: '',
     };
   }
 
@@ -41,10 +43,11 @@ export default class App extends React.Component {
           this.scrollToBottom();
   }
 
-  clearChat() {
+  clearChat(peer) {
       this.setState({
           chat: [],
-          newmsg: "",
+          newmsg: '',
+          peerId: peer,
       })
   }
 
@@ -67,11 +70,12 @@ export default class App extends React.Component {
   handleKeyDown(event) {
       const inputValue = event.target.value;
       const newmsg = this.state.newmsg;
-      if (event.keyCode == 13 && inputValue != '') {
+      const time = Date.now();
+      if (event.keyCode === 13 && inputValue !== '') {
           var chat = this.state.chat;
-          const newchat = {speaker: '0', message: newmsg};
+          const newchat = {speaker: '0', message: newmsg, sentTime: time};
           chat.push(newchat);
-          const sendchat = {speaker: '1', message: newmsg};
+          const sendchat = {speaker: '1', message: newmsg, sentTime: time};
           this.chatProxy.send(sendchat);
           event.target.value="";
           this.setState({newmsg: ""});
@@ -97,12 +101,33 @@ export default class App extends React.Component {
                   />
           );
       }
-      else {
+      else if (item.speaker === '0') {
           return (
                   <MessageItemFromMe
                       message={item.message}
                   />
           );
+      }
+      else {
+          let text = '';
+          for (let i = 0; i < this.state.chat.length; i += 1) {
+              if (this.state.chat[i].speaker === '0' || this.state.chat[i].speaker === '1') {
+                text += `${new Date(this.state.chat[i].sentTime).toLocaleString()}\t`;
+              }
+              if (this.state.chat[i].speaker === '0') {
+                text += `You\t: ${this.state.chat[i].message}\n`;
+              } else if (this.state.chat[i].speaker === '1') {
+                text += `Peer: ${this.state.chat[i].message}\n`;
+              }
+          }
+          if ( text !== '') {
+            return (
+                <SaveButton
+                    filename = {new Date(Date.now()).toLocaleString()}
+                    content = {`Peer ID: ${this.state.peerId}\n${text}--- End of conversation ---\n`}
+                />
+            );
+          }
       }
   }
 
