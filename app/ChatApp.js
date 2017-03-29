@@ -64,21 +64,24 @@ export default class App extends React.Component {
   }
 
   handleInputMessage(event) {
-      this.setState({newmsg: event.target.value});
+
   }
 
   handleKeyDown(event) {
-      const inputValue = event.target.value;
-      const newmsg = this.state.newmsg;
+      const inputValue = event.target.textContent;
       const time = Date.now();
       if (event.keyCode === 13 && inputValue !== '') {
+          event.preventDefault();
           var chat = this.state.chat;
-          const newchat = {speaker: '0', message: newmsg, sentTime: time};
+          this.setState({ newmsg: inputValue });
+          const newmsg = this.state.newmsg;
+          console.log(newmsg);
+          const newchat = {speaker: '0', message: inputValue, sentTime: time};
           chat.push(newchat);
-          const sendchat = {speaker: '1', message: newmsg, sentTime: time};
+          const sendchat = {speaker: '1', message: inputValue, sentTime: time};
           this.chatProxy.send(sendchat);
-          event.target.value="";
-          this.setState({newmsg: ""});
+          event.target.textContent = '';
+          this.setState({newmsg: ''});
       }
       else
       {
@@ -168,10 +171,9 @@ export default class App extends React.Component {
                     ref={(el) => { this.messagesEnd = el; }}></div>
             </div>
             <div className="footer">
-                <input className="new-message"
-                       type="text"
+                <div className="new-message"
+                    contentEditable={!bDisable}
                        autoComplete="off"
-                       disabled={bDisable}
                        placeholder="Enter your message here..."
                        onChange={this.handleInputMessage.bind(this)}
                        onKeyDown={this.handleKeyDown.bind(this)}

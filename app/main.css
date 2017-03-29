@@ -20,7 +20,7 @@
     margin-right: auto;
     border-left: 1px solid rgba(0, 0, 0, .10);
     border-right: 1px solid rgba(0, 0, 0, .10);
-    width: 35%;
+    width: 70%;
     height: calc(100% - 118px);
     overflow: auto;
 }
@@ -31,14 +31,14 @@
 }
 
 .message-from-other {
-    padding-left: 25px;
+    padding-left: 15px;
     padding-top: 5px;
     padding-bottom: 5px;
     text-align: left;
 }
 
 .message-from-me {
-    padding-right: 25px;
+    padding-right: 15px;
     padding-top: 5px;
     padding-bottom: 5px;
     text-align: right;
@@ -58,10 +58,11 @@
     border-bottom-left-radius: 1.3em;
     border-bottom-right-radius: 1.3em;
     border: 1px solid rgba(0, 0, 0, .20);
-    padding: 0 15px;
+    padding: 5px 15px;
     color: black;
     background-color: rgba(255, 255, 255, .10);
     overflow-wrap: break-word;
+    max-width: 70%;
 }
 
 .message-from-me span {
@@ -70,10 +71,11 @@
     border-top-right-radius: 1.3em;
     border-bottom-left-radius: 1.3em;
     border-bottom-right-radius: 1.3em;
-    padding: 0 15px;
+    padding: 5px 15px;
     color: white;
     background-color: #0084ff;
     overflow-wrap: break-word;
+    max-width: 70%;
 }
 
 .footer {
@@ -83,11 +85,14 @@
     border-top: 1px solid rgba(0, 0, 0, .10);
     padding-top: 10px;
     height: 50px;
+    margin-bottom: 2em;
 }
 
 .new-message {
-    width: 25%;
+    width: 50%;
     height: 100%;
+    overflow: auto;
+    border: 2px solid rgba(0, 0, 0, .10);;
 }
 
 .button {

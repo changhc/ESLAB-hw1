@@ -88,6 +88,6 @@ server.listen(3000, () => {
 });
 
 server.get(/\/*/, restify.serveStatic({
-  directory: path.join(__dirname, '/src'),
+  directory: path.join(__dirname, '/dist'),
   default: 'index.html',
 }));
